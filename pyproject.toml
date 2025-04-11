@@ -1,0 +1,11 @@
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "--cov=python_project --cov-report html --ignore=tests/by_hand"
+asyncio_mode = "auto"
+
+[tool.isort]
+profile = "black"
+
+[tool.djlint]
+indent_size = 2
+ignore = "H030,H031,D018"
