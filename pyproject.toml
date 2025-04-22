@@ -1,3 +1,25 @@
+[build-system]
+# https://peps.python.org/pep-0621
+# https://setuptools.pypa.io/en/latest/userguide/quickstart.html
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "django-vises"
+description = "Django Vises."
+readme = "README.md"
+requires-python = ">=3.11"
+license-files = ["LICENSE"]
+authors = [{ name = "Rex Zhang" }, { email = "rex.zhang@gmail.com" }]
+classifiers = ["Framework :: Django", "Programming Language :: Python :: 3"]
+
+dynamic = ["version"] #"dependencies"
+
+[tool.setuptools.dynamic]
+version = { attr = "django_vises.__version__" }
+# dependencies = { file = "requirements/basic.txt" }
+
 [tool.pytest.ini_options]
 pythonpath = "."
 addopts = "--cov=python_project --cov-report html --ignore=tests/by_hand"
