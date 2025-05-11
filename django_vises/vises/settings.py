@@ -2,7 +2,32 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from .deploy_stage import DeployStage
+
 SQLITE_FILE_NAME = "db.sqlite3"
+
+
+class DeployEnvValueAbc(BaseSettings):
+    """不要在 settings.py 之外的地方使用这个类的实例, 因为这个实例的变量名是不可控的"""
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    # 部署环境
+    DEPLOY_STAGE: str = DeployStage.UNKNOW
+    SENTRY_DSN: str = ""
+
+    # 安全相关
+    DEBUG: bool = False
+    ALLOWED_HOSTS: list[str] = []
+
+    # 资源信息
+    DATABASE_URI: str = "sqlite"
 
 
 def parser_database_uri(

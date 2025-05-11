@@ -2,6 +2,9 @@ from enum import StrEnum, auto
 
 from django.conf import settings
 
+"""需要在 settings.py 中初始化 DEPLOY_STAGE, 后续均使用这个值
+"""
+
 
 class DeployStage(StrEnum):
     UNKNOW = auto()
@@ -11,22 +14,5 @@ class DeployStage(StrEnum):
     PRD = auto()
 
 
-# Example
-# from pydantic_settings import BaseSettings, SettingsConfigDict
-#
-# class DeployEnv(BaseSettings):
-#     model_config = SettingsConfigDict(
-#         env_prefix="POJ_",
-#         env_file=".env",
-#         env_file_encoding="utf-8",
-#         extra="ignore",
-#     )
-#
-#     DEPLOY_STAGE: str = DeployStage.UNKNOW
-#     SENTRY_DSN: str = ""
-#
-#     ALLOWED_HOST: str = "localhost"
-
-
 def template_context_processors(request):
-    return {"DEPLOY_STAGE": settings.DEPLOY_ENV.DEPLOY_STAGE}
+    return {"DEPLOY_STAGE": settings.DEPLOY_STAGE}
