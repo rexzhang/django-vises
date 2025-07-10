@@ -2,7 +2,7 @@ from enum import StrEnum, auto
 
 from django.conf import settings
 
-"""需要在 settings.py 中初始化 DEPLOY_STAGE, 后续均使用这个值
+"""需要在 settings.py 中初始化 DEPLOY_EV.DEPLOY_STAGE, 后续均使用这个值
 """
 
 
@@ -15,4 +15,4 @@ class DeployStage(StrEnum):
 
 
 def template_context_processors(request):
-    return {"DEPLOY_STAGE": settings.DEPLOY_STAGE}
+    return {"DEPLOY_STAGE": settings.DEPLOY_EV.DEPLOY_STAGE}

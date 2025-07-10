@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
+from uuid import uuid4
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -20,11 +21,17 @@ class DeployEnvValueAbc(BaseSettings):
 
     # 部署环境
     DEPLOY_STAGE: str = DeployStage.UNKNOW
-    SENTRY_DSN: str = ""
 
     # 安全相关
-    DEBUG: bool = False
     ALLOWED_HOSTS: list[str] = []
+    SECRET_KEY: str = f"django-secret-key-{uuid4().hex}"
+    CSRF_TRUSTED_ORIGINS: list[str] = (
+        list()
+    )  # 一般情况可以用SECURE_PROXY_SSL_HEADER 解决
+
+    # 调试相关
+    DEBUG: bool = False
+    SENTRY_DSN: str = ""
 
     # 资源信息
     DATABASE_URI: str = "sqlite"

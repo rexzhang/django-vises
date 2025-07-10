@@ -92,7 +92,7 @@ def init_sentry(
     sentry_sdk.init(
         dsn=dsn,
         environment=environment,
-        release=f"{app_name}@{app_version}",
+        # release=f"{app_name}@{app_version}",
         integrations=integrations,
         # Set traces_sample_rate to 1.0 to capture 100%
         # of transactions for performance monitoring.

@@ -2,3 +2,4 @@ django
 pydantic_settings
 
 build
+sentry-sdk
