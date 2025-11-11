@@ -23,6 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Import local python module django_vises, only for example
 sys.path.append(str(BASE_DIR.parent.parent))
 from django_vises.django_settings.env_var import EnvVarAbc  # noqa: E402
+from django_vises.django_settings.helpers import parser_database_uri  # noqa: E402
 
 
 @dataclass
@@ -40,12 +41,12 @@ EV = EnvVar()
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-u_a8xqv5+&xi^t93j7m2lx+mh^ov_wya$!&_*6ov+@ju3_cmc_"
+SECRET_KEY = EV.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = EV.DEBUG
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = EV.ALLOWED_HOSTS
 
 
 # Application definition
@@ -98,12 +99,7 @@ WSGI_APPLICATION = "example_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASES = {"default": parser_database_uri(EV.DATABASE_URI, base_dir=BASE_DIR)}
 
 
 # Password validation
