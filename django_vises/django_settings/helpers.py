@@ -1,46 +1,8 @@
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 from urllib.parse import ParseResult, urlparse
-from uuid import uuid4
-
-from .deploy_stage import DeployStage
 
 SQLITE_FILE_NAME = "db.sqlite3"
-
-
-@dataclass
-class DeployEnvValueAbc:
-    """不要在 settings.py 之外的地方使用这个类的实例, 因为这个实例的变量名是不可控的"""
-
-    # 部署环境
-    DEPLOY_STAGE: str = DeployStage.UNKNOW
-
-    # 安全相关
-    ALLOWED_HOSTS: list[str] = field(default_factory=list)
-    SECRET_KEY: str = f"django-secret-key-{uuid4().hex}"
-    CSRF_TRUSTED_ORIGINS: list[str] = field(
-        default_factory=list
-    )  # 一般情况可以用SECURE_PROXY_SSL_HEADER 解决
-
-    # 调试相关
-    DEBUG: bool = False
-    SENTRY_DSN: str = ""
-
-    # 资源信息
-    DATABASE_URI: str = "sqlite://"
-
-
-# Example:
-#
-# from dataclass_wizard import EnvWizard
-#
-# @dataclass
-# class DeployEnvValue(DeployEnvValueAbc, EnvWizard):
-#     class _(EnvWizard.Meta):
-#         env_file = True
-#
-#     pass
 
 
 def _parser_sqlite_uri(
