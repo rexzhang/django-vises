@@ -1,5 +1,11 @@
+-r base.txt
+
 django
-pydantic_settings
+dataclass-wizard[dotenv]
+
+pytest
+pytest-asyncio
+pytest-cov
 
 build
 sentry-sdk
