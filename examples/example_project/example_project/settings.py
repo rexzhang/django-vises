@@ -30,6 +30,8 @@ class EnvVar(EnvVarAbc, EnvWizard):
     class _(EnvWizard.Meta):
         env_file = True
 
+    CUSTOM_ITEM: str = ""
+
 
 EV = EnvVar()
 

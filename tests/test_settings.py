@@ -1,4 +1,4 @@
-from django_vises.vises.settings import parser_database_uri
+from django_vises.django_settings.helpers import parser_database_uri
 
 
 def test_parser_database_uri():
