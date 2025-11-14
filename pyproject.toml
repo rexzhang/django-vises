@@ -6,7 +6,7 @@ requires-python = ">=3.13"
 license-files = ["LICENSE"]
 authors = [{ name = "Rex Zhang" }, { email = "rex.zhang@gmail.com" }]
 keywords = ["django"]
-classifiers = ["Framework :: Django", "Programming Language :: Python :: 3"]
+classifiers = ["Development Status :: 4 - Beta", 'Framework :: Django :: 5.2']
 
 dynamic = ["version", "dependencies"]
 
@@ -22,7 +22,7 @@ packages = ["django_vises"]
 
 [tool.setuptools.dynamic]
 version = { attr = "django_vises.__version__" }
-dependencies = { file = "requirements/basic.txt" }
+dependencies = { file = "requirements/base.txt" }
 
 [tool.pytest.ini_options]
 pythonpath = "."

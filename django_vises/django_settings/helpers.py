@@ -11,6 +11,9 @@ def _parser_sqlite_uri(
     if data.path:
         sqlite_file_name = data.path
 
+    elif data.hostname:
+        sqlite_file_name = data.hostname
+
     else:
         if isinstance(base_dir, Path):
             sqlite_file_name = base_dir.joinpath(SQLITE_FILE_NAME).as_posix()

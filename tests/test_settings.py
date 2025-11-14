@@ -7,6 +7,11 @@ def test_parser_database_uri():
         "NAME": "db.sqlite3",
     }
 
+    assert parser_database_uri("sqlite://db_v2.sqlite3") == {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db_v2.sqlite3",
+    }
+
     assert parser_database_uri("sqlite:///data/db.sqlite3") == {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": "/data/db.sqlite3",

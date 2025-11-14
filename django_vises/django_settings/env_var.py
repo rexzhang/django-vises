@@ -12,6 +12,7 @@ class EnvVarAbc:
 
     # 部署环境
     DEPLOY_STAGE: str = DeployStage.UNKNOW
+    TZ: str = "UTC"
 
     # 安全相关
     ALLOWED_HOSTS: list[str] = field(default_factory=lambda: ["*"])
