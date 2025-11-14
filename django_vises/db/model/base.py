@@ -1,6 +1,11 @@
+import sys
 from datetime import datetime, timedelta
 from typing import Any
-from uuid import uuid4
+
+if sys.version_info >= (3, 14):
+    from uuid import uuid7
+else:
+    from uuid_backport import uuid7
 
 from django.db import models
 from django.utils.timezone import now
@@ -44,7 +49,7 @@ class RecordAbc(RecordAbcWithoutIdAbc):
     """
 
     uuid = models.UUIDField(
-        primary_key=True, unique=True, default=uuid4, editable=False
+        primary_key=True, unique=True, default=uuid7, editable=False
     )
 
     class Meta:
@@ -75,7 +80,7 @@ class ObjectAbc(ObjectWithoutIdAbc):
     """
 
     uuid = models.UUIDField(
-        primary_key=True, unique=True, default=uuid4, editable=False
+        primary_key=True, unique=True, default=uuid7, editable=False
     )
 
     class Meta:
