@@ -17,9 +17,6 @@ dynamic = ["version", "dependencies"]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["django_vises"]
-
 [tool.setuptools.dynamic]
 version = { attr = "django_vises.__version__" }
 dependencies = { file = "requirements/base.txt" }
