@@ -2,8 +2,12 @@
 -r test.txt
 -r pypi.txt
 
-djlint
 dataclass-wizard[dotenv]
 
-build
+djlint
+
+pip
+setuptools
+wheel
+
 sentry-sdk
