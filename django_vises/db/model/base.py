@@ -48,15 +48,13 @@ class RecordAbc(RecordAbcWithoutIdAbc):
     创建时间，无更新需求
     """
 
-    uuid = models.UUIDField(
-        primary_key=True, unique=True, default=uuid7, editable=False
-    )
+    id = models.UUIDField(primary_key=True, unique=True, default=uuid7, editable=False)
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return f"{self.uuid}"
+        return f"{self.id}"
 
 
 class ObjectWithoutIdAbc(models.Model):
@@ -79,18 +77,31 @@ class ObjectAbc(ObjectWithoutIdAbc):
     创建时间，最后更新时间
     """
 
-    uuid = models.UUIDField(
-        primary_key=True, unique=True, default=uuid7, editable=False
-    )
+    id = models.UUIDField(primary_key=True, unique=True, default=uuid7, editable=False)
 
     class Meta:
         abstract = True
 
     def __str__(self):
-        return f"{self.uuid}"
+        return f"{self.id}"
 
 
-class KeyValueManager(models.Manager):
+class KeyValueAbc(ObjectWithoutIdAbc):
+    """基本数据库模型 - 键值对型 - key:value
+    创建时间，最后更新时间
+    """
+
+    # key
+    key = models.TextField(null=False)
+
+    # value
+    value = models.JSONField()
+
+    class Meta:
+        abstract = True
+
+
+class GroupKeyValueManager(models.Manager):
     def set_value(self, key: str, value, group: str | None = None):
         self.get_queryset().update_or_create(
             group=group, key=key, defaults={"value": value}
@@ -120,8 +131,8 @@ class KeyValueManager(models.Manager):
         )
 
 
-class KeyValueAbc(ObjectWithoutIdAbc):
-    """基本数据库模型 - 键值对型
+class GroupKeyValueKeyAbc(KeyValueAbc):
+    """基本数据库模型 - 键值对型 - group.key:value
     创建时间，最后更新时间
     """
 
@@ -132,15 +143,13 @@ class KeyValueAbc(ObjectWithoutIdAbc):
     group = models.TextField(null=True)
     # key - 必须存在的二级分组
     key = models.TextField(null=False)
-    # value
-    value = models.JSONField()
 
-    objects = KeyValueManager()
+    objects = GroupKeyValueManager()
 
     class Meta:
         abstract = True
         indexes = [
-            models.Index(fields=["group"]),
+            models.Index(fields=["key"]),
             models.Index(fields=["group", "key"]),
         ]
 
