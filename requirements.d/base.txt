@@ -1,4 +1,3 @@
 django >= 5.2
 
-# https://github.com/line1029/uuid-backport
-uuid-backport ; python_version < '3.14'
+uuid-backport; python_version < '3.14' # https://github.com/line1029/uuid-backport

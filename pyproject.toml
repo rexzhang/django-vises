@@ -19,7 +19,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
 version = { attr = "django_vises.__version__" }
-dependencies = { file = "requirements/base.txt" }
+dependencies = { file = "requirements.d/base.txt" }
 
 [tool.pytest.ini_options]
 pythonpath = "."
