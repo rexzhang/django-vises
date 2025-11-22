@@ -1,9 +1,8 @@
 import logging
 import warnings
 
-from django.conf import settings
-from influxdb_client import InfluxDBClient
 from influxdb_client.client.exceptions import InfluxDBError
+from influxdb_client.client.influxdb_client import InfluxDBClient
 from influxdb_client.client.write_api import SYNCHRONOUS
 from urllib3.exceptions import ConnectTimeoutError, HTTPError, TimeoutError
 
@@ -17,7 +16,7 @@ class InfluxDBConnect:
         org: str,
         bucket: str,
         token: str,
-        timeout: int = settings.STATISTICS_HISTORY_INFLUXDB_TIME_OUT,
+        timeout: int = 10_000,
         write_batch_size: int = 1,
     ):
         self._url = url
@@ -29,7 +28,7 @@ class InfluxDBConnect:
             token=token,
             org=org,
             timeout=timeout,
-            enable_gzip=settings.STATISTICS_HISTORY_INFLUXDB_GZIP,
+            enable_gzip=False,
         )
 
         if 1 < write_batch_size <= 1000:
