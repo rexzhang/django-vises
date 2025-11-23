@@ -11,24 +11,31 @@ class EnvVarAbc:
     """
 
     # 部署环境
-    DEPLOY_STAGE: str = DeployStage.UNKNOW
+    DEPLOY_STAGE: str = DeployStage.PRD
     TZ: str = "UTC"
 
-    # 安全相关
-    ALLOWED_HOSTS: list[str] = field(default_factory=lambda: ["*"])
+    # Django --- 默认值优先考虑使用 Django 默认值
+    # --- 安全相关
+    ALLOWED_HOSTS: list[str] = field(default_factory=list)  # dev 环境可以使用 [“*”]
+    DEBUG: bool = False
     SECRET_KEY: str = f"django-secure-key-{uuid4().hex}"
+
     CSRF_TRUSTED_ORIGINS: list[str] = field(
         default_factory=list
-    )  # 一般情况可以用SECURE_PROXY_SSL_HEADER 解决
+    )  # 一般情况可以用 SECURE_PROXY_SSL_HEADER 解决
 
-    # 调试相关
-    DEBUG: bool = False
-    SENTRY_DSN: str = ""
-
-    # 资源信息
+    # --- 数据库
     DATABASE_URI: str = (
         "sqlite://"  # postgresql://username:password@loaclhost:5432/dbname
     )
+
+    # --- Cache
+    # - https://docs.djangoproject.com/zh-hans/5.2/topics/cache
+    CACHES_DEAFULT_BACKEND: str = "django.core.cache.backends.locmem.LocMemCache"
+    CACHES_DEAFULT_LOCATION: str = "unique-snowflake"
+
+    # 在线调试
+    SENTRY_DSN: str = ""
 
 
 # Example:
