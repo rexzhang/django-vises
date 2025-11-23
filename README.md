@@ -6,8 +6,14 @@
 [![PyPI - Django Version](https://img.shields.io/pypi/djversions/django-vises)](https://pypi.org/project/django-vises/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/django-vises)](https://pypi.org/project/django-vises/)
 
-## Change log
+## Changelog
 
-### 1.0.3
+### 1.1.0
+
+- refactor: restructure redis dataset classes and add tests
+- feat: reorganize env vars and add cache settings
+- fix: vises influxdb2
+
+### 1.0.3 - 20251115
 
 - first public release
