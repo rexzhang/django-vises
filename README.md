@@ -8,9 +8,9 @@
 
 ## Changelog
 
-### 1.1.0
+### 1.2.0
 
-- refactor: restructure redis dataset classes and add tests
+- refactor: migrate redis dataset to MutableSet implementation
 - feat: reorganize env vars and add cache settings
 - fix: vises influxdb2
 
