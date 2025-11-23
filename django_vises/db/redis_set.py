@@ -5,7 +5,7 @@ import redis
 
 # https://redis.io/docs/latest/commands/sadd/
 
-_REDIS_SET_URI = "redis://localhost:6379/0"
+_REDIS_URI = "redis://localhost:6379/0"
 _REDIS_SET_NAME = "set_name"
 
 
@@ -15,11 +15,11 @@ class RedisMutableSetAbc(MutableSet):
         self,
         iterable=(),
         clear: bool = True,
-        url: str = _REDIS_SET_URI,
-        name: str = _REDIS_SET_NAME,
+        redis_uri: str = _REDIS_URI,
+        redis_set_name: str = _REDIS_SET_NAME,
     ):
-        self.conn = redis.from_url(url=url)
-        self.name = name
+        self._conn = redis.from_url(url=redis_uri)
+        self.name = redis_set_name
 
         if clear:
             self.clear()
@@ -30,31 +30,31 @@ class RedisMutableSetAbc(MutableSet):
 
     # redis interface
     def _add(self, item: str):
-        self.conn.sadd(self.name, item)
+        self._conn.sadd(self.name, item)
 
     def _discard(self, item: str):
-        self.conn.srem(self.name, item)
+        self._conn.srem(self.name, item)
 
     def _sismember(self, item: str) -> bool:
-        if self.conn.sismember(self.name, item) == 1:
+        if self._conn.sismember(self.name, item) == 1:
             return True
 
         return False
 
     def _all(self) -> set[bytes]:
         # 异步模式下，返回的是 collections.abc.Awaitable[set[bytes]]
-        return self.conn.smembers(self.name)  # type: ignore
+        return self._conn.smembers(self.name)  # type: ignore
 
     # set methods
     def __len__(self):  # type: ignore
         # 异步模式下，返回的是 Awaitable[int]
-        return self.conn.scard(self.name)
+        return self._conn.scard(self.name)
 
     def add(self, value):
         raise NotImplementedError  # pragma: no cover
 
     def clear(self):
-        self.conn.delete(self.name)
+        self._conn.delete(self.name)
 
 
 class RedisSetStr(RedisMutableSetAbc):
