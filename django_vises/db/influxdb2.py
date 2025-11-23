@@ -60,12 +60,9 @@ class InfluxDBConnect:
         if self._write_batch_count >= self._write_batch_size:
             self._write_batch()
 
-    def close(self):
+    def flush(self):
         if self._write_batch_count >= 1:
             self._write_batch()
-
-        self._write_api = None
-        self._client.close()
 
     def __enter__(self):
         """
@@ -80,7 +77,9 @@ class InfluxDBConnect:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Exit the runtime context related to this object and close the connect."""
-        self.close()
+        self.flush()
+        self._write_api.close()
+        self._client.close()
 
     def query(self, q: str):
         warnings.warn(
