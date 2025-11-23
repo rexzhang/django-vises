@@ -1,0 +1,7 @@
+# database
+redis[hiredis]>=5.0.0
+psycopg[binary,pool]
+influxdb-client[ciso]
+
+# dataclass
+dataclass-wizard[dotenv]
