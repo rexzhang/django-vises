@@ -47,6 +47,7 @@ class EnvVar(EnvVarAbc, EnvWizard):
     class _(EnvWizard.Meta):
         env_file = True
 
+    pass
 
 EV = EnvVar()
 """
