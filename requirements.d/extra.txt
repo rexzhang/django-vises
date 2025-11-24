@@ -5,3 +5,6 @@ influxdb-client[ciso]
 
 # dataclass
 dataclass-wizard[dotenv]
+
+# debug
+logfire

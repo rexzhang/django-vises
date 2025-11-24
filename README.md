@@ -8,6 +8,10 @@
 
 ## Changelog
 
+### 1.3.0
+
+- feat: enhance database URI parsing and add tests
+
 ### 1.2.1 - 20251123
 
 - refactor: migrate redis dataset to MutableSet implementation
