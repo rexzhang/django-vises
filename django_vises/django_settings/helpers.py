@@ -8,17 +8,17 @@ SQLITE_FILE_NAME = "db.sqlite3"
 def _parser_sqlite_uri(
     data: ParseResult, base_dir: Path | None = None
 ) -> dict[str, Any]:
-    if data.path:
-        sqlite_file_name = data.path
-
-    elif data.hostname:
+    if data.hostname:
         sqlite_file_name = data.hostname
 
+    elif data.path:
+        sqlite_file_name = data.path
+
     else:
-        if isinstance(base_dir, Path):
-            sqlite_file_name = base_dir.joinpath(SQLITE_FILE_NAME).as_posix()
-        else:
-            sqlite_file_name = SQLITE_FILE_NAME
+        sqlite_file_name = SQLITE_FILE_NAME
+
+    if base_dir:
+        sqlite_file_name = base_dir.joinpath(sqlite_file_name).as_posix()
 
     return {
         "ENGINE": "django.db.backends.sqlite3",
@@ -33,11 +33,11 @@ def parser_database_uri(uri: str, base_dir: Path | None = None) -> dict[str, Any
         case "sqlite":
             return _parser_sqlite_uri(data, base_dir)
 
-        case "postgresql":
+        case "postgresql" | "postgres":
             engine = "django.db.backends.postgresql"
 
         case _:
-            raise
+            raise ValueError(f"[{data.scheme}] is an unsupported database type")
 
     return {
         "ENGINE": engine,

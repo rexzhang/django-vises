@@ -8,7 +8,7 @@
 
 ## Changelog
 
-### 1.2.1
+### 1.2.1 - 20251123
 
 - refactor: migrate redis dataset to MutableSet implementation
 - feat: reorganize env vars and add cache settings
