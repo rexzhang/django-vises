@@ -4,6 +4,8 @@ import pytest
 
 from django_vises.db.redis_set import RedisSetUUID
 
+from .common import REDIS_URI
+
 
 @pytest.fixture
 def test_values():
@@ -15,13 +17,13 @@ def test_values():
 @pytest.fixture
 def empty_uuid_set():
     """返回一个空的 UuidMutableSet 实例。"""
-    return RedisSetUUID()
+    return RedisSetUUID(redis_uri=REDIS_URI)
 
 
 @pytest.fixture
 def default_uuid_set(test_values):
     """返回一个包含三个 UUID 的实例。"""
-    return RedisSetUUID(test_values)
+    return RedisSetUUID(test_values, redis_uri=REDIS_URI)
 
 
 def test_initial_set_is_empty(empty_uuid_set):

@@ -2,6 +2,8 @@ import pytest
 
 from django_vises.db.redis_set import RedisSetInt
 
+from .common import REDIS_URI
+
 
 @pytest.fixture
 def test_values():
@@ -10,12 +12,12 @@ def test_values():
 
 @pytest.fixture
 def empty_set():
-    return RedisSetInt()
+    return RedisSetInt(redis_uri=REDIS_URI)
 
 
 @pytest.fixture
 def default_int_set(test_values):
-    return RedisSetInt(test_values)
+    return RedisSetInt(test_values, redis_uri=REDIS_URI)
 
 
 def test_initial_empty_set_is_empty(empty_set):
