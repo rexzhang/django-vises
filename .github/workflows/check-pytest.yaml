@@ -52,7 +52,7 @@ jobs:
           pip install -U -r requirements.d/test.txt
       - name: Test with pytest
         env:
-          REDIS_HOST: redis
+          REDIS_HOST: 127.0.0.1
           REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
         run: |
           pytest --cov=asgi_middleware_static_file --cov-report=xml
