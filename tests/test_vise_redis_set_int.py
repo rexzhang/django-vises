@@ -83,3 +83,9 @@ def test_repr(default_int_set, test_values):
     """测试 __repr__ 方法。"""
     items = [int(item) for item in repr(default_int_set).split(", ")]
     assert set(items) == set(test_values)
+
+
+def test_iter(default_int_set):
+    """测试 __iter__ 方法。"""
+    for item in default_int_set:
+        assert isinstance(item, int)

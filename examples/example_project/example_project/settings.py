@@ -29,9 +29,9 @@ from django_vises.django_settings.helpers import parser_database_uri  # noqa: E4
 @dataclass
 class EnvVar(EnvVarAbc, EnvWizard):
     class _(EnvWizard.Meta):
-        env_file = True
+        env_file = "examples/example_project/example.env"
 
-    CUSTOM_ITEM: str = ""
+    pass
 
 
 EV = EnvVar()
@@ -50,7 +50,7 @@ ALLOWED_HOSTS = EV.ALLOWED_HOSTS
 
 
 # Application definition
-sys.path.append(str(BASE_DIR / "example_project" / "apps"))
+# sys.path.append(str(BASE_DIR / "example_project" / "apps"))
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -60,8 +60,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     #
-    # "example_project.apps.core",
-    "core",
+    "example_project.core",
 ]
 
 MIDDLEWARE = [
@@ -126,10 +125,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
-
+TIME_ZONE = EV.TZ
 USE_I18N = True
-
 USE_TZ = True
 
 
