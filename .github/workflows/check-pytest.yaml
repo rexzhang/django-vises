@@ -18,9 +18,11 @@ jobs:
 
     services:
       redis:
-        image: redis:7-alpine
+        # https://docs.github.com/en/actions/tutorials/use-containerized-services/create-redis-service-containers#running-jobs-directly-on-the-runner-machine
+        image: redis
         ports:
-          - 6379/tcp
+          # Maps port 6379 on service container to the host
+          - 6379:6379
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
@@ -52,8 +54,10 @@ jobs:
           pip install -U -r requirements.d/test.txt
       - name: Test with pytest
         env:
-          REDIS_HOST: 127.0.0.1
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
+          # The hostname used to communicate with the Redis service container
+          REDIS_HOST: localhost
+          # The default Redis port
+          REDIS_PORT: 6379
         run: |
           pytest --cov=asgi_middleware_static_file --cov-report=xml
       # - name: Upload coverage to Codecov
