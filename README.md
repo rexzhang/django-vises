@@ -8,7 +8,7 @@
 
 ## Changelog
 
-### 1.3.0
+### 1.3.0 - 20251125
 
 - feat: enhance database URI parsing and add tests
 - refactor: rename objects to funcs in model managers
