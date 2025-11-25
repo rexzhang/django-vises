@@ -31,8 +31,8 @@ class EnvVarAbc:
 
     # --- Cache
     # - https://docs.djangoproject.com/zh-hans/5.2/topics/cache
-    CACHES_DEAFULT_BACKEND: str = "django.core.cache.backends.locmem.LocMemCache"
-    CACHES_DEAFULT_LOCATION: str = "unique-snowflake"
+    CACHES_DEAFULT_BACKEND: str = "django.core.cache.backends.dummy.DummyCache"
+    CACHES_DEAFULT_LOCATION: str = ""
 
     # 在线调试
     SENTRY_DSN: str = ""
