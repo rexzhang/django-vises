@@ -37,7 +37,7 @@ class RecordAbcWithoutIdAbc(models.Model):
     # 记录创建时间
     created_time = models.DateTimeField(auto_now_add=True)
 
-    objects = RecordManager()
+    funcs = RecordManager()
 
     class Meta:
         abstract = True
@@ -144,7 +144,7 @@ class GroupKeyValueKeyAbc(KeyValueAbc):
     # key - 必须存在的二级分组
     key = models.TextField(null=False)
 
-    objects = GroupKeyValueManager()
+    funcs = GroupKeyValueManager()
 
     class Meta:
         abstract = True
