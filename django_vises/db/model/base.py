@@ -1,4 +1,5 @@
 import sys
+import warnings
 from datetime import datetime, timedelta
 from typing import Any
 
@@ -102,6 +103,8 @@ class KeyValueAbc(ObjectWithoutIdAbc):
 
 
 class GroupKeyValueManager(models.Manager):
+    def get_first(self, key: str, group: str | None = None):
+        return super().get_queryset().filter(group=group, key=key).first()
 
     def get_object(self, key: str, group: str | None = None):
         return super().get_queryset().filter(group=group, key=key).get()
@@ -120,6 +123,10 @@ class GroupKeyValueManager(models.Manager):
     def get_value_and_update_time(  # TODO:这个应该被废弃,使用 get_object 替代
         self, key: str, group: str | None = None
     ) -> tuple[list, datetime | None]:
+        warnings.warn(
+            "please use .get_object()/.get_first() instead", DeprecationWarning
+        )
+
         obj = self.get_object(key=key, group=group)
 
         return obj.value, obj.updated_time

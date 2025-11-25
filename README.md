@@ -12,6 +12,7 @@
 
 - feat: enhance database URI parsing and add tests
 - refactor: rename objects to funcs in model managers
+- refactor: use composite primary key for group and key fields
 
 ### 1.2.1 - 20251123
 
