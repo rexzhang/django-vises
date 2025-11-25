@@ -92,7 +92,7 @@ class KeyValueAbc(ObjectWithoutIdAbc):
     """
 
     # key
-    key = models.TextField(null=False)
+    key = models.TextField(primary_key=True, unique=True)
 
     # value
     value = models.JSONField()
@@ -102,11 +102,6 @@ class KeyValueAbc(ObjectWithoutIdAbc):
 
 
 class GroupKeyValueManager(models.Manager):
-    def set_value(self, key: str, value, group: str | None = None):
-        self.get_queryset().update_or_create(
-            group=group, key=key, defaults={"value": value}
-        )
-        return
 
     def get_object(self, key: str, group: str | None = None):
         return super().get_queryset().filter(group=group, key=key).get()
@@ -115,6 +110,12 @@ class GroupKeyValueManager(models.Manager):
         obj = self.get_object(key=key, group=group)
 
         return obj.value
+
+    def set_value(self, key: str, value, group: str | None = None):
+        self.get_queryset().update_or_create(
+            group=group, key=key, defaults={"value": value}
+        )
+        return
 
     def get_value_and_update_time(  # TODO:这个应该被废弃,使用 get_object 替代
         self, key: str, group: str | None = None
@@ -136,11 +137,11 @@ class GroupKeyValueKeyAbc(KeyValueAbc):
     创建时间，最后更新时间
     """
 
-    # TODO:拆分为两个基类,分别包含和不包含 group, 添加联合主键
-    # TODO:替代方案: 使用 prefix 概念替代 group 概念
+    # https://docs.djangoproject.com/zh-hans/5.2/topics/composite-primary-key/
+    pk = models.CompositePrimaryKey("group", "key")
 
     # group - 可选的一级分组
-    group = models.TextField(null=True)
+    group = models.TextField(null=False)
     # key - 必须存在的二级分组
     key = models.TextField(null=False)
 
@@ -149,12 +150,9 @@ class GroupKeyValueKeyAbc(KeyValueAbc):
     class Meta:
         abstract = True
         indexes = [
+            models.Index(fields=["group"]),
             models.Index(fields=["key"]),
-            models.Index(fields=["group", "key"]),
         ]
 
     def __str__(self):
-        if self.group is None:
-            return f"{self.key}:{self.value}"
-        else:
-            return f"{self.group}.{self.key}:{self.value}"
+        return f"{self.group}.{self.key}:{self.value}"
