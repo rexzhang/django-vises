@@ -8,6 +8,11 @@
 
 ## Changelog
 
+### 1.4.0 - 20251201
+
+- refactor: change default cache backend to DummyCache
+- feat: add database URI options parser
+
 ### 1.3.2 - 20251125
 
 - feat: enhance database URI parsing and add tests
