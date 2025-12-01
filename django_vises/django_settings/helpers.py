@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Any
-from urllib.parse import ParseResult, urlparse
+from urllib.parse import ParseResult, parse_qsl, urlparse
 
 SQLITE_FILE_NAME = "db.sqlite3"
 
@@ -26,6 +26,44 @@ def _parser_sqlite_uri(
     }
 
 
+def _parser_options(query: str) -> dict[str, Any]:
+    if not query:
+        return {}
+
+    data = parse_qsl(query)
+    if not data:
+        return {}
+
+    result = dict()
+    for item in data:
+        key, value = item
+
+        # parser value
+        if value.lower() == "true":
+            value = True
+        elif value.lower() == "false":
+            value = False
+        elif value.isdecimal():
+            if "." in value:
+                value = float(value)
+            else:
+                value = int(value)
+
+        # parser key
+        keys_chain = key.split(".")
+        current_dict = result
+        for key in keys_chain[:-1]:
+            if key not in current_dict or not isinstance(current_dict[key], dict):
+                current_dict[key] = {}
+
+            current_dict = current_dict[key]
+
+        final_key = keys_chain[-1]
+        current_dict[final_key] = value
+
+    return result
+
+
 def parser_database_uri(uri: str, base_dir: Path | None = None) -> dict[str, Any]:
     """返回 Django settings DATABASES 字典"""
     data = urlparse(uri)
@@ -39,7 +77,7 @@ def parser_database_uri(uri: str, base_dir: Path | None = None) -> dict[str, Any
         case _:
             raise ValueError(f"[{data.scheme}] is an unsupported database type")
 
-    return {
+    result = {
         "ENGINE": engine,
         "HOST": data.hostname,
         "PORT": data.port,
@@ -47,3 +85,9 @@ def parser_database_uri(uri: str, base_dir: Path | None = None) -> dict[str, Any
         "USER": data.username,
         "PASSWORD": data.password,
     }
+
+    options = _parser_options(data.query)
+    if options:
+        result["OPTIONS"] = options
+
+    return result
