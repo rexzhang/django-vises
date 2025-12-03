@@ -8,6 +8,10 @@
 
 ## Changelog
 
+### 1.5.0 - 20251203
+
+- refactor: remove funcs manager from abstract models
+
 ### 1.4.0 - 20251201
 
 - refactor: change default cache backend to DummyCache
