@@ -6,7 +6,7 @@ requires-python = ">=3.13"
 license-files = ["LICENSE"]
 authors = [{ name = "Rex Zhang" }, { email = "rex.zhang@gmail.com" }]
 keywords = ["django"]
-classifiers = ["Development Status :: 4 - Beta", 'Framework :: Django :: 5.2']
+classifiers = ["Development Status :: 4 - Beta", 'Framework :: Django :: 5.2', 'Framework :: Django :: 6']
 
 dynamic = ["version", "dependencies"]
 
@@ -20,6 +20,9 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.dynamic]
 version = { attr = "django_vises.__version__" }
 dependencies = { file = "requirements.d/base.txt" }
+
+[tool.tox]
+envlist = ["py313-django{60, 52}", "py314-django{60, 52}"]
 
 [tool.pytest.ini_options]
 pythonpath = "."
