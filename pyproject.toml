@@ -21,9 +21,6 @@ build-backend = "setuptools.build_meta"
 version = { attr = "django_vises.__version__" }
 dependencies = { file = "requirements.d/base.txt" }
 
-[tool.tox]
-envlist = ["py313-django{60, 52}", "py314-django{60, 52}"]
-
 [tool.pytest.ini_options]
 pythonpath = "."
 addopts = "--cov=django_vises --cov-report html --ignore=tests/by_hand"
