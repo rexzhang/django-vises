@@ -10,31 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import sys
-from dataclasses import dataclass
 from pathlib import Path
 
-from dataclass_wizard import EnvWizard
+from django_vises.django_settings.helpers import parser_database_uri
+
+from .ev import EV
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Import local python module django_vises, only for example
-sys.path.append(str(BASE_DIR.parent.parent))
-from django_vises.django_settings.env_var import EnvVarAbc  # noqa: E402
-from django_vises.django_settings.helpers import parser_database_uri  # noqa: E402
-
-
-@dataclass
-class EnvVar(EnvVarAbc, EnvWizard):
-    class _(EnvWizard.Meta):
-        env_file = "examples/example_project/example.env"
-
-    pass
-
-
-EV = EnvVar()
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,13 +31,12 @@ SECRET_KEY = EV.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = EV.DEBUG
+print(1111, EV)
 
 ALLOWED_HOSTS = EV.ALLOWED_HOSTS
 
 
 # Application definition
-# sys.path.append(str(BASE_DIR / "example_project" / "apps"))
-
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -60,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     #
+    "django_vises",
     "example_project.core",
 ]
 
@@ -86,7 +72,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 #
-                "django_vises.django_settings.context_processors.env_var",
+                "django_vises.django_settings.context_processors.env_vars",
             ],
         },
     },
