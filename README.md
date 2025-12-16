@@ -8,6 +8,10 @@
 
 ## Changelog
 
+### 1.5.1 - 20261216
+
+- chore: maintenance update
+
 ### 1.5.0 - 20251203
 
 - refactor: remove funcs manager from abstract models
