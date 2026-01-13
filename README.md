@@ -8,6 +8,10 @@
 
 ## Changelog
 
+### 1.6.0 - 20270113
+
+- feat: database URI parser support sqlite with options
+
 ### 1.5.1 - 20261216
 
 - chore: maintenance update

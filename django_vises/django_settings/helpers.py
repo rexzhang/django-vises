@@ -26,6 +26,18 @@ def _parser_sqlite_uri(
     }
 
 
+def _parser_service_sql_uri(data: ParseResult, engine: str) -> dict[str, Any]:
+    """postgresql/mysql..."""
+    return {
+        "ENGINE": engine,
+        "HOST": data.hostname,
+        "PORT": data.port,
+        "NAME": data.path.lstrip("/"),
+        "USER": data.username,
+        "PASSWORD": data.password,
+    }
+
+
 def _parser_options(query: str) -> dict[str, Any]:
     if not query:
         return {}
@@ -69,22 +81,13 @@ def parser_database_uri(uri: str, base_dir: Path | None = None) -> dict[str, Any
     data = urlparse(uri)
     match data.scheme:
         case "sqlite":
-            return _parser_sqlite_uri(data, base_dir)
+            result = _parser_sqlite_uri(data, base_dir)
 
         case "postgresql" | "postgres":
-            engine = "django.db.backends.postgresql"
+            result = _parser_service_sql_uri(data, "django.db.backends.postgresql")
 
         case _:
             raise ValueError(f"[{data.scheme}] is an unsupported database type")
-
-    result = {
-        "ENGINE": engine,
-        "HOST": data.hostname,
-        "PORT": data.port,
-        "NAME": data.path.lstrip("/"),
-        "USER": data.username,
-        "PASSWORD": data.password,
-    }
 
     options = _parser_options(data.query)
     if options:
