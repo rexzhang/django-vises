@@ -25,8 +25,9 @@ class EnvVarAbc:
     )  # 一般情况可以用 SECURE_PROXY_SSL_HEADER 解决
 
     # --- 数据库
+    # postgresql://username:password@loaclhost:5432/dbname
     DATABASE_URI: str = (
-        "sqlite://"  # postgresql://username:password@loaclhost:5432/dbname
+        "sqlite://db.sqlite3?journal_mode=WAL&synchronous=NORMAL&busy_timeout=5000"
     )
 
     # --- Cache
