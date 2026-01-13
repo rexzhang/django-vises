@@ -6,6 +6,11 @@
 [![PyPI - Django Version](https://img.shields.io/pypi/djversions/django-vises)](https://pypi.org/project/django-vises/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/django-vises)](https://pypi.org/project/django-vises/)
 
+## Requirements
+
+- Python 3.13+
+- Django 5.2+
+
 ## Changelog
 
 ### 1.6.0 - 20270113
