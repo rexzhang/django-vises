@@ -42,28 +42,22 @@ def test_parser_database_uri_sqlite():
 
     # --- with options, exeample: Enabling WAL
     assert parser_database_uri(
-        "sqlite://db.sqlite3?journal_mode=WAL&synchronous=NORMAL&busy_timeout=5000"
+        "sqlite://db.sqlite3?init_command=PRAGMA journal_mode=WAL;PRAGMA synchronous=NORMAL;"
     ) == {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": "db.sqlite3",
         "OPTIONS": {
-            "journal_mode": "WAL",
-            # Other optimal settings for production:
-            "synchronous": "NORMAL",  # Balances safety and performance
-            "busy_timeout": 5000,  # Wait up to 5 seconds when locked,
+            "init_command": "PRAGMA journal_mode=WAL;PRAGMA synchronous=NORMAL;"
         },
     }
 
     assert parser_database_uri(
-        "sqlite://?journal_mode=WAL&synchronous=NORMAL&busy_timeout=5000"
+        "sqlite://?init_command=PRAGMA journal_mode=WAL;PRAGMA synchronous=NORMAL;"
     ) == {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": "db.sqlite3",
         "OPTIONS": {
-            "journal_mode": "WAL",
-            # Other optimal settings for production:
-            "synchronous": "NORMAL",  # Balances safety and performance
-            "busy_timeout": 5000,  # Wait up to 5 seconds when locked,
+            "init_command": "PRAGMA journal_mode=WAL;PRAGMA synchronous=NORMAL;"
         },
     }
 

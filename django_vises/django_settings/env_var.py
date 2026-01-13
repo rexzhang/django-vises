@@ -27,7 +27,7 @@ class EnvVarAbc:
     # --- 数据库
     # postgresql://username:password@loaclhost:5432/dbname
     DATABASE_URI: str = (
-        "sqlite://db.sqlite3?journal_mode=WAL&synchronous=NORMAL&busy_timeout=5000"
+        "sqlite://db.sqlite3?init_command=PRAGMA journal_mode=WAL;PRAGMA synchronous=NORMAL;"
     )
 
     # --- Cache
