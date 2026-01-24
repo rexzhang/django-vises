@@ -13,7 +13,11 @@
 
 ## Changelog
 
-### 1.6.0 - 20270113
+### 1.7.0 - 20260124
+
+- feat: new vises: enum
+
+### 1.6.0 - 20260113
 
 - feat: database URI parser support sqlite with options
 
