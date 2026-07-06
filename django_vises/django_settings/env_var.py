@@ -1,11 +1,12 @@
-from dataclasses import dataclass, field
+from dataclasses import field
 from uuid import uuid4
+
+from dataclass_wizard import EnvWizard
 
 from django_vises.deploy.deploy_stage import DeployStage
 
 
-@dataclass
-class EnvVarAbc:
+class EnvVarAbc(EnvWizard):
     """在 dj_project/ev.py 中被集成并实例化为 EV
     在 django 项目中以 from dj_project.ev import EV 的方式使用
     """
@@ -55,12 +56,13 @@ class EnvVarAbc:
 """
 # in `project.settings.py`
 
-@dataclass
-class EnvVar(EnvVarAbc, EnvWizard):
+class EnvVar(EnvVarAbc):
     class _(EnvWizard.Meta):
         env_file = True
+        # env_file = Path("example.env")
 
-    COUSTOM_VAR:str = "custom_var"
+    pass
+
 
 EV = EnvVar()
 """
