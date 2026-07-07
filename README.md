@@ -13,6 +13,10 @@
 
 ## Changelog
 
+### 1.8.0 - 20260707
+
+- depend: update dataclass-wizard to v1.0.x
+
 ### 1.7.0 - 20260124
 
 - feat: new vises: enum
