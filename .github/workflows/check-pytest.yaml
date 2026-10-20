@@ -32,23 +32,13 @@ jobs:
     steps:
       - name: Checkout repository
         # https://github.com/actions/checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
       - name: Set up Python ${{ matrix.python-version }}
         # https://github.com/actions/setup-python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Cache pip
-        # https://github.com/actions/cache
-        uses: actions/cache@v4
-        with:
-          # This path is specific to Ubuntu
-          path: ~/.cache/pip
-          # Look to see if there is a cache hit for the corresponding requirements file
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
+          cache: pip
       - name: Install dependencies
         run: |
           pip install -U -r requirements.d/test.txt

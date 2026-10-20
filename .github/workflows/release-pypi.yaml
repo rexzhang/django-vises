@@ -18,7 +18,12 @@ jobs:
     steps:
       - name: Checkout repository
         # https://github.com/actions/checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
+      - name: Set up Python 3.13
+        # https://github.com/actions/setup-python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
       - name: Install dependencies
         run: |
           python3 -m pip install -U -r requirements.d/pypi.txt

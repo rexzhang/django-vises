@@ -4,6 +4,7 @@ psycopg[binary,pool]
 influxdb-client[ciso]
 
 # deploy
+sentry-sdk
 notifiers
 
 # debug

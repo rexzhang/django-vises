@@ -1,4 +1,7 @@
 -r base.txt
+-r extra.txt
+
+pytest
 
 mypy
 django-stubs[compatible-mypy]
