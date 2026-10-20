@@ -1,0 +1,4 @@
+-r base.txt
+
+mypy
+django-stubs[compatible-mypy]

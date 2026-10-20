@@ -1,14 +1,25 @@
 import os
 import urllib.parse
 from logging import getLogger
+from typing import Any
 
 import logfire
+from asgiref.typing import (
+    ASGI3Application,
+    ASGIReceiveCallable,
+    ASGISendCallable,
+    ASGISendEvent,
+    HTTPScope,
+    Scope,
+)
 
 
 class ASGIMiddlewareAccessLogging:
     logfire: bool = False
 
-    def __init__(self, app, remote_addr_header_name: str = "X-Forwarded-For") -> None:
+    def __init__(
+        self, app: ASGI3Application, remote_addr_header_name: str = "X-Forwarded-For"
+    ) -> None:
         self.logger = getLogger("ASGI")
         self.app = app
         # X-Forwarded-For/X-Real-IP
@@ -20,11 +31,13 @@ class ASGIMiddlewareAccessLogging:
             logfire.configure(token=logfire_token)
             self.logfire = True
 
-    async def __call__(self, scope, receive, send) -> None:
-        data = dict()
+    async def __call__(
+        self, scope: Scope, receive: ASGIReceiveCallable, send: ASGISendCallable
+    ) -> None:
+        data: dict[str, Any] = dict()
         data["response"] = {"status": 500}
 
-        async def inner_send(message) -> None:
+        async def inner_send(message: ASGISendEvent) -> None:
             if message["type"] == "http.response.start":
                 data["response"] = message
             await send(message)
@@ -43,17 +56,18 @@ class ASGIMiddlewareAccessLogging:
         if scope["type"] != "http":
             return
 
-        headers = scope.get("headers")
-        headers = dict(headers)
+        headers = dict(scope["headers"])
 
         remote_addr = self._get_remote_addr(scope, headers)
         user_agent = headers.get(b"user-agent", b"").decode("utf-8")
 
         request_method = scope.get("method")
-        request_path = scope.get("path")
+        request_path = scope["path"]
         request_query_string = scope.get("query_string")
         if request_query_string:
-            request_path += urllib.parse.unquote(request_query_string)
+            request_path += urllib.parse.unquote_to_bytes(request_query_string).decode(
+                "utf-8", "replace"
+            )
 
         status_code = data["response"].get("status")
 
@@ -71,14 +85,14 @@ class ASGIMiddlewareAccessLogging:
                 user_agent=user_agent,
             )
 
-    def _get_remote_addr(self, scope, headers: dict) -> str:
+    def _get_remote_addr(self, scope: HTTPScope, headers: dict[bytes, bytes]) -> str:
         remote_addr = headers.get(self.remote_addr_header_name, b"").decode("latin1")
 
         if remote_addr:
             return remote_addr
 
-        remote_addr = scope.get("client")
-        if remote_addr:
-            return f"{remote_addr[0]}:{remote_addr[1]}"
+        client = scope.get("client")
+        if client:
+            return f"{client[0]}:{client[1]}"
 
         return "-"

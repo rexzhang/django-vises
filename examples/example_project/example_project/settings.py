@@ -31,7 +31,6 @@ SECRET_KEY = EV.SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = EV.DEBUG
-print(1111, EV)
 
 ALLOWED_HOSTS = EV.ALLOWED_HOSTS
 

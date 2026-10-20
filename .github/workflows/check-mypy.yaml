@@ -1,0 +1,33 @@
+name: mypy
+
+on:
+  push:
+    paths:
+      - "**.py"
+      - "pyproject.toml"
+      - "requirements.d/mypy.txt"
+
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  mypy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        # https://github.com/actions/checkout
+        uses: actions/checkout@v5
+      - name: Set up Python 3.13
+        # https://github.com/actions/setup-python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          pip install -U -r requirements.d/test.txt -r requirements.d/mypy.txt
+      - name: Run mypy
+        run: |
+          mypy

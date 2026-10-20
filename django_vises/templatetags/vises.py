@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 from json import dumps as json_dumps
+from typing import Any
 
 from django import template
 
@@ -8,7 +9,7 @@ register = template.Library()
 
 
 @register.filter(is_safe=True)
-def digitcomma(value):
+def digitcomma(value: int | float | str) -> str:
     """
     Convert an integer to a string containing commas every three digits.
     For example, 3000 becomes '3,000' and 45000 becomes '45,000'.
@@ -26,19 +27,19 @@ def digitcomma(value):
 
 
 @register.filter
-def json(value):
+def json(value: Any) -> str:
     return json_dumps(value)
 
 
 @register.filter("startswith")
-def startswith(text, starts):
+def startswith(text: Any, starts: str) -> bool:
     if isinstance(text, str):
         return text.startswith(starts)
     return False
 
 
 @register.filter("datetime_ss")
-def datetime_simple_short(value: datetime):
+def datetime_simple_short(value: datetime | None) -> str:
     if value is None:
         return ""
 

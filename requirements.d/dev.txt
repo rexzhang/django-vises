@@ -2,6 +2,7 @@
 -r extra.txt
 -r test.txt
 -r pypi.txt
+-r mypy.txt
 
 djlint
 

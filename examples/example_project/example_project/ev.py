@@ -6,7 +6,7 @@ from django_vises.django_settings.env_var import EnvVarAbc
 
 
 class EnvVar(EnvVarAbc):
-    class _(EnvWizard.Meta):
+    class _(EnvWizard.Meta):  # type: ignore[no-untyped-call]
         env_file = Path("example.env")
 
     pass

@@ -6,7 +6,11 @@ requires-python = ">=3.13"
 license-files = ["LICENSE"]
 authors = [{ name = "Rex Zhang" }, { email = "rex.zhang@gmail.com" }]
 keywords = ["django"]
-classifiers = ["Development Status :: 4 - Beta", "Framework :: Django"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Django",
+    "Typing :: Typed",
+]
 
 dynamic = ["version", "dependencies"]
 
@@ -20,6 +24,29 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.dynamic]
 version = { attr = "django_vises.__version__" }
 dependencies = { file = "requirements.d/base.txt" }
+
+[tool.setuptools.package-data]
+django_vises = ["py.typed"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["django_vises", "tests", "examples"]
+mypy_path = "examples/example_project"
+plugins = ["mypy_django_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "example_project.settings"
+
+[[tool.mypy.overrides]]
+# https://github.com/line1029/uuid-backport - 无 py.typed 的 mypyc 编译包
+module = ["uuid_backport", "uuid_backport.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tests.*", "example_project.*", "manage"]
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
 
 [tool.pytest.ini_options]
 pythonpath = "."

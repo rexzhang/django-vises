@@ -46,9 +46,10 @@ def _parser_options(query: str) -> dict[str, Any]:
     if not data:
         return {}
 
-    result = dict()
+    result: dict[str, Any] = dict()
     for item in data:
-        key, value = item
+        key, raw_value = item
+        value: Any = raw_value
 
         # parser value
         if value.lower() == "true":

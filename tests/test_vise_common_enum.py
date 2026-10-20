@@ -14,9 +14,10 @@ class EnumUpper(EnumUpperAbc):
 
 class TestStrEnumUpperAbc:
     def test_auto_upper_value(self):
-        assert EnumUpper.ONE.value == "ONE"
-        assert EnumUpper.Two.value == "TWO"
-        assert EnumUpper.three.value == "THREE"
+        # _value_ 在 __init__ 中被重写, 静态类型检查器看到的是 auto()/字面量的原始类型
+        assert EnumUpper.ONE.value == "ONE"  # type: ignore[comparison-overlap]
+        assert EnumUpper.Two.value == "TWO"  # type: ignore[comparison-overlap]
+        assert EnumUpper.three.value == "THREE"  # type: ignore[comparison-overlap]
 
         assert str(EnumUpper.ONE) == "EnumUpper.ONE"
         assert str(EnumUpper.Two) == "EnumUpper.Two"
@@ -48,9 +49,10 @@ class EnumLower(EnumLowerAbc):
 
 class TestStrEnumLowerAbc:
     def test_auto_upper_value(self):
-        assert EnumLower.ONE.value == "one"
-        assert EnumLower.Two.value == "two"
-        assert EnumLower.three.value == "three"
+        # _value_ 在 __init__ 中被重写, 静态类型检查器看到的是 auto()/字面量的原始类型
+        assert EnumLower.ONE.value == "one"  # type: ignore[comparison-overlap]
+        assert EnumLower.Two.value == "two"  # type: ignore[comparison-overlap]
+        assert EnumLower.three.value == "three"  # type: ignore[comparison-overlap]
 
         assert str(EnumLower.ONE) == "EnumLower.ONE"
         assert str(EnumLower.Two) == "EnumLower.Two"

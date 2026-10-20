@@ -9,18 +9,19 @@ else:
     from uuid_backport import uuid7
 
 from django.db import models
+from django.db.models.query import QuerySet
 from django.utils.timezone import now
 
 
-class RecordManager(models.Manager):
-    def get_last_x_hour_queryset(self, hours):
+class RecordManager(models.Manager["RecordAbc"]):
+    def get_last_x_hour_queryset(self, hours: int) -> QuerySet[RecordAbc]:
         return (
             super()
             .get_queryset()
             .filter(created_time__gte=now() - timedelta(hours=hours))
         )
 
-    def get_last_x_day_queryset(self, days):
+    def get_last_x_day_queryset(self, days: int) -> QuerySet[RecordAbc]:
         return (
             super()
             .get_queryset()
@@ -52,7 +53,7 @@ class RecordAbc(RecordAbcWithoutIdAbc):
     class Meta:
         abstract = True
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.id}"
 
 
@@ -81,7 +82,7 @@ class ObjectAbc(ObjectWithoutIdAbc):
     class Meta:
         abstract = True
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.id}"
 
 
@@ -100,11 +101,13 @@ class KeyValueAbc(ObjectWithoutIdAbc):
         abstract = True
 
 
-class GroupKeyValueManager(models.Manager):
-    def get_first(self, key: str, group: str | None = None):
+class GroupKeyValueManager(models.Manager["GroupKeyValueKeyAbc"]):
+    def get_first(
+        self, key: str, group: str | None = None
+    ) -> GroupKeyValueKeyAbc | None:
         return super().get_queryset().filter(group=group, key=key).first()
 
-    def get_object(self, key: str, group: str | None = None):
+    def get_object(self, key: str, group: str | None = None) -> GroupKeyValueKeyAbc:
         return super().get_queryset().filter(group=group, key=key).get()
 
     def get_value(self, key: str, group: str | None = None) -> Any:
@@ -112,7 +115,7 @@ class GroupKeyValueManager(models.Manager):
 
         return obj.value
 
-    def set_value(self, key: str, value, group: str | None = None):
+    def set_value(self, key: str, value: Any, group: str | None = None) -> None:
         self.get_queryset().update_or_create(
             group=group, key=key, defaults={"value": value}
         )
@@ -120,7 +123,7 @@ class GroupKeyValueManager(models.Manager):
 
     def get_value_and_update_time(  # TODO:这个应该被废弃,使用 get_object 替代
         self, key: str, group: str | None = None
-    ) -> tuple[list, datetime | None]:
+    ) -> tuple[list[Any], datetime | None]:
         warnings.warn(
             "please use .get_object()/.get_first() instead", DeprecationWarning
         )
@@ -129,7 +132,7 @@ class GroupKeyValueManager(models.Manager):
 
         return obj.value, obj.updated_time
 
-    def get_values_by_group(self, group: str) -> dict:
+    def get_values_by_group(self, group: str) -> dict[str, Any]:
         return dict(
             self.get_queryset()
             .filter(group=group)
@@ -157,5 +160,5 @@ class GroupKeyValueKeyAbc(KeyValueAbc):
             models.Index(fields=["key"]),
         ]
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.group}.{self.key}:{self.value}"

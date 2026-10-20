@@ -3,6 +3,8 @@ redis[hiredis]>=5.0.0
 psycopg[binary,pool]
 influxdb-client[ciso]
 
+# deploy
+notifiers
 
 # debug
 logfire

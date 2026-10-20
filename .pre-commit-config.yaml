@@ -28,3 +28,14 @@ repos:
     hooks:
       - id: djlint-reformat-django
       - id: djlint-django
+
+  # mypy 依赖项目 venv 中的 django-stubs 插件与全部运行时依赖,
+  # 因此用 local hook 而非 mirrors-mypy 的隔离环境
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        entry: .venv313/bin/python -m mypy
+        language: system
+        types: [python]
+        pass_filenames: false

@@ -2,16 +2,14 @@
 https://gist.github.com/rexzhang/74936b88e43b928149af4237d70c3fde
 """
 
-from typing import Any, Optional
-
 import sentry_sdk
 from sentry_sdk import configure_scope
 from sentry_sdk.integrations import Integration
+from sentry_sdk.types import Event, Hint
 
 EVENT_RATE_LIMIT_TIME_RANGE = 60 * 60  # one hour
 EVENT_RATE_LIMIT_TIMES = 10  # 10 times
 
-Event = Optional[dict[str, Any]]
 EventCounter = dict[str, list[int]]  # { key: [timestamp, count] }
 event_counter: EventCounter = dict()
 
@@ -20,16 +18,15 @@ class StartupReport(Exception):
     pass
 
 
-def auto_drop_event_for_rate_limit(event: Event, _) -> Event:
+def auto_drop_event_for_rate_limit(event: Event, hint: Hint) -> Event | None:
     try:
         values = event["exception"]["values"][0]
         if not isinstance(values, dict):
             raise ValueError
 
-        key = "{}:{}:{}".format(
-            values.get("module", "m"),
-            values.get("type", "t"),
-            values.get("value", "v"),
+        key = (
+            f"{values.get('module', 'm')}:"
+            f"{values.get('type', 't')}:{values.get('value', 'v')}"
         )
     except ValueError:
         key = "m:t:v"
@@ -79,7 +76,7 @@ def init_sentry(
     auto_rate_limit: bool = True,
     announce_at_startup: bool = True,
     user_id_is_mac_address: bool = False,
-):
+) -> None:
     if debug:
         environment = "debug"
         traces_sample_rate = 1.0
