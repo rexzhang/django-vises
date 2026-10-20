@@ -36,8 +36,8 @@ class EnvVarAbc(EnvWizard):
 
     # --- Cache
     # - https://docs.djangoproject.com/zh-hans/5.2/topics/cache
-    CACHES_DEAFULT_BACKEND: str = "django.core.cache.backends.dummy.DummyCache"
-    CACHES_DEAFULT_LOCATION: str = ""
+    CACHES_DEFAULT_BACKEND: str = "django.core.cache.backends.dummy.DummyCache"
+    CACHES_DEFAULT_LOCATION: str = ""
 
     CACHES_SESSION_BACKEND: str = "django.core.cache.backends.dummy.DummyCache"
     CACHES_SESSION_LOCATION: str = ""
