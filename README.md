@@ -13,6 +13,11 @@
 
 ## Changelog
 
+### 1.9.0 - 20261020
+
+- feat: add type hints and strict mypy checking
+- feat: ship py.typed marker (PEP 561) for downstream type checking
+
 ### 1.8.0 - 20260707
 
 - depend: update dataclass-wizard to v1.0.x
