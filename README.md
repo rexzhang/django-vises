@@ -13,6 +13,10 @@
 
 ## Changelog
 
+### 1.10.0 - 20261024
+
+- feat: parser_database_uri promote connection maintenance params (conn_max_age / conn_health_checks / disable_server_side_cursors / autocommit) from query string to top-level DATABASES keys
+
 ### 1.9.0 - 20261020
 
 - feat: add type hints and strict mypy checking

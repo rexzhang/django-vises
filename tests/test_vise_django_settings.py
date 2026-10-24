@@ -118,6 +118,69 @@ def test_parser_database_uri_postgresql():
     }
 
 
+def test_parser_database_uri_promote_top_level_keys():
+    # conn 参数提升为 DATABASES 顶层键, OPTIONS 整体移除
+    assert parser_database_uri(
+        "postgres://user:password@localhost:5432/db?conn_max_age=60&conn_health_checks=true"
+    ) == {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "db",
+        "USER": "user",
+        "PASSWORD": "password",
+        "HOST": "localhost",
+        "PORT": 5432,
+        "CONN_MAX_AGE": 60,
+        "CONN_HEALTH_CHECKS": True,
+    }
+
+    # 混合: 驱动参数 (sslmode) 留 OPTIONS, conn 参数提升
+    assert parser_database_uri(
+        "postgres://user:password@localhost:5432/db?conn_max_age=60&sslmode=require"
+    ) == {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "db",
+        "USER": "user",
+        "PASSWORD": "password",
+        "HOST": "localhost",
+        "PORT": 5432,
+        "CONN_MAX_AGE": 60,
+        "OPTIONS": {"sslmode": "require"},
+    }
+
+    # false 值 + 四键齐全
+    assert parser_database_uri(
+        "postgres://user:password@localhost:5432/db"
+        "?conn_max_age=0&conn_health_checks=false"
+        "&disable_server_side_cursors=true&autocommit=false"
+    ) == {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "db",
+        "USER": "user",
+        "PASSWORD": "password",
+        "HOST": "localhost",
+        "PORT": 5432,
+        "CONN_MAX_AGE": 0,
+        "CONN_HEALTH_CHECKS": False,
+        "DISABLE_SERVER_SIDE_CURSORS": True,
+        "AUTOCOMMIT": False,
+    }
+
+    # sqlite 分支同样提升, 驱动参数 (init_command) 留 OPTIONS
+    assert parser_database_uri(
+        "sqlite://db.sqlite3?conn_max_age=60&init_command=PRAGMA journal_mode=WAL"
+    ) == {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": "db.sqlite3",
+        "CONN_MAX_AGE": 60,
+        "OPTIONS": {"init_command": "PRAGMA journal_mode=WAL"},
+    }
+
+    # 无映射键不产生顶层键 (与既有行为一致)
+    result = parser_database_uri("postgres://user:password@localhost:5432/db")
+    assert "CONN_MAX_AGE" not in result
+    assert "OPTIONS" not in result
+
+
 def test_parser_database_uri_unknown():
     pytest.raises(
         ValueError,

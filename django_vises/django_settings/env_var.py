@@ -29,6 +29,7 @@ class EnvVarAbc(EnvWizard):
     # examples:
     #   postgresql://username:password@loaclhost:5432/dbname?pool=true
     #   postgresql://username:password@loaclhost:5432/dbname?pool.min_size=1&pool.max_size=10
+    #   postgresql://username:password@loaclhost:5432/dbname?conn_max_age=60&conn_health_checks=true
     #   sqlite://db.sqlite3?init_command=PRAGMA journal_mode=WAL;PRAGMA synchronous=NORMAL;
     DATABASE_URI: str = (
         "sqlite://db.sqlite3?init_command=PRAGMA journal_mode=WAL;PRAGMA synchronous=NORMAL;"

@@ -4,6 +4,15 @@ from urllib.parse import ParseResult, parse_qsl, urlparse
 
 SQLITE_FILE_NAME = "db.sqlite3"
 
+# query 小写键 -> Django DATABASES 顶层键; 这些是 Django 连接维护配置,
+# 不是驱动 (libpq/psycopg) 参数, 留在 OPTIONS 会导致首次连接即失败
+_DATABASES_TOP_LEVEL_KEYS: dict[str, str] = {
+    "conn_max_age": "CONN_MAX_AGE",
+    "conn_health_checks": "CONN_HEALTH_CHECKS",
+    "disable_server_side_cursors": "DISABLE_SERVER_SIDE_CURSORS",
+    "autocommit": "AUTOCOMMIT",
+}
+
 
 def _parser_sqlite_uri(
     data: ParseResult, base_dir: Path | None = None
@@ -78,7 +87,11 @@ def _parser_options(query: str) -> dict[str, Any]:
 
 
 def parser_database_uri(uri: str, base_dir: Path | None = None) -> dict[str, Any]:
-    """返回 Django settings DATABASES 字典"""
+    """返回 Django settings DATABASES 字典
+
+    query string 中的连接维护参数 (_DATABASES_TOP_LEVEL_KEYS) 映射为
+    DATABASES 顶层键, 其余参数进入 OPTIONS (驱动参数)
+    """
     data = urlparse(uri)
     match data.scheme:
         case "sqlite":
@@ -91,6 +104,10 @@ def parser_database_uri(uri: str, base_dir: Path | None = None) -> dict[str, Any
             raise ValueError(f"[{data.scheme}] is an unsupported database type")
 
     options = _parser_options(data.query)
+    for query_key, setting_key in _DATABASES_TOP_LEVEL_KEYS.items():
+        if query_key in options:
+            result[setting_key] = options.pop(query_key)
+
     if options:
         result["OPTIONS"] = options
 
